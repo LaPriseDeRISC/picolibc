@@ -68,6 +68,7 @@ picolibc_headers(""
   libgen.h
   limits.h
   locale.h
+  lpdrms.h
   malloc.h
   math.h
   memory.h

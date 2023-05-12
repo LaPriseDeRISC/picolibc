@@ -46,7 +46,9 @@ QUICKREF
 #include <_ansi.h>
 #include <string.h>
 #include "local.h"
-
+#ifdef LPDRMS_PROTECTION
+#include <lpdrms.h>
+#endif
 /* Nonzero if either X or Y is not aligned on a "long" boundary.  */
 #define UNALIGNED(X, Y) \
   (((long)X & (sizeof (long) - 1)) | ((long)Y & (sizeof (long) - 1)))
@@ -68,6 +70,13 @@ memcpy (void *__restrict dst0,
 	const void *__restrict src0,
 	size_t len0)
 {
+#ifdef LPDRMS_PROTECTION
+    mds_entry dst = mds_get(dst0);
+    if (dst != NULL && dst->size <= len0)
+    {
+        return -1;
+    }
+#endif
 #if defined(PREFER_SIZE_OVER_SPEED) || defined(__OPTIMIZE_SIZE__)
   char *dst = (char *) dst0;
   char *src = (char *) src0;

@@ -67,6 +67,7 @@ picolibc_sources(
   llabs.c
   lldiv.c
   lrand48.c
+  lpdrms.c
   mblen.c
   mbrlen.c
   mbrtowc.c

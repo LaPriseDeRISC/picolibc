@@ -43,6 +43,10 @@
 #include <sys/lock.h>
 #include <stdint.h>
 
+#ifdef LPDRMS_PROTECTION
+#include <lpdrms.h>
+#endif
+
 #if MALLOC_DEBUG
 #include <assert.h>
 #define MALLOC_LOCK do { __LIBC_LOCK(); __malloc_validate(); } while(0)
@@ -382,7 +386,9 @@ void * malloc(size_t s)
     ptr = (char *)r + MALLOC_HEAD;
 
     memset(ptr, '\0', alloc_size - MALLOC_HEAD);
-
+#ifdef LPDRMS_PROTECTION
+    mds_register(ptr, alloc_size - MALLOC_HEAD);
+#endif
     return ptr;
 }
 #ifdef _HAVE_ALIAS_ATTRIBUTE

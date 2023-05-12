@@ -17,6 +17,10 @@
 #include <stdint.h>
 #include "../../string/local.h"
 
+#ifdef LPDRMS_PROTECTION
+#include <lpdrms.h>
+#endif
+
 #define unlikely(X) __builtin_expect (!!(X), 0)
 
 #undef memcpy
@@ -25,6 +29,10 @@ void *
 __inhibit_loop_to_libcall
 memcpy(void *__restrict aa, const void *__restrict bb, size_t n)
 {
+#ifdef LPDRMS_PROTECTION
+    if (!mds_is_allowed(aa, n)) return (void *)aa;
+#endif
+
   #define BODY(a, b, t) { \
     t tt = *b; \
     a++, b++; \
